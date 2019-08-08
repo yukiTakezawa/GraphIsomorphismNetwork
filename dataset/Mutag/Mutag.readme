@@ -1,0 +1,66 @@
+MUTAG contains the following comma separated text files:
+
+n: total number of nodes
+m: total number of edges
+N: number of graphs
+
+
+*.node_labels (n lines)
+	column vector of node labels,
+	the value in the i-th line corresponds to the node with node_id i
+
+*.link_labels (m lines)
+	labels for the edges in *.edges
+
+*.edges (m lines) 
+	sparse (block diagonal) adjacency matrix for all graphs,
+	each line corresponds to (row, col) resp. (node_id, node_id)
+
+*.graph_labels (N lines)
+	class labels for all graphs in the dataset,
+	the value in the i-th line is the class label of the graph with graph_id i
+
+*.graph_idx (n lines)
+	column vector of graph identifiers for all nodes of all graphs,
+	the value in the i-th line is the graph_id of the node with node_id i
+
+
+The MUTAG dataset consists of 188 chemical compounds divided into two 
+classes according to their mutagenic effect on a bacterium. 
+
+The chemical data was obtained form http://cdb.ics.uci.edu and converted 
+to graphs, where vertices represent atoms and edges represent chemical 
+bonds. Explicit hydrogen atoms have been removed and vertices are labeled
+by atom type and edges by bond type (single, double, triple or aromatic).
+Chemical data was processed using the Chemistry Development Kit (v1.4).
+
+Node labels:
+
+  0  C
+  1  N
+  2  O
+  3  F
+  4  I
+  5  Cl
+  6  Br
+
+Edge labels:
+
+  0  aromatic
+  1  single
+  2  double
+  3  triple
+
+
+
+
+Please cite the following if you use the data:
+
+@inproceedings{networkrepo,
+    title = {The Network Data Repository with Interactive Graph Analytics and Visualization},
+    author={Ryan A. Rossi and Nesreen K. Ahmed},
+    booktitle = {AAAI},
+    url={http://networkrepository.com},
+    year={2015}
+}
+
