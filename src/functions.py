@@ -42,12 +42,14 @@ def load_data():
         while True:
             edge = literal_eval(adjacency_file.readline())
             if ((edge[0] <= tmp_sum) & (edge[1] <= tmp_sum)):
-                graph_list[graph_idx][edge[0] - tmp_sum][edge[1] - tmp_sum] = 1
-                graph_list[graph_idx][edge[1] - tmp_sum][edge[0] - tmp_sum] = 1
+                graph_list[graph_idx][edge[0] - tmp_sum1][edge[1] - tmp_sum1] = 1
+                graph_list[graph_idx][edge[1] - tmp_sum1][edge[0] - tmp_sum1] = 1
             else:
                 break
         tmp_sum1 = tmp_sum
 
+    print(graph_list[0])
+        
     # check node feature
     node_dim = 4 # dimension of node
     node_list = []
@@ -64,7 +66,7 @@ def load_data():
             else:
                 nodes[node_idx] = torch.tensor([0, 0, 1, node_attribute])
         node_list.append(nodes)
-    print(node_list[0])
+
 
     # set molecule class
     molecule_list = []
