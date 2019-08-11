@@ -73,7 +73,7 @@ def load_data():
     label_list = []
     for graph_idx in range(data_num):
         molecule_list.append(Molecule(graph_list[graph_idx], node_list[graph_idx]))
-        label_list.append(int(graph_label_file.readline()))
+        label_list.append(torch.tensor([float(graph_label_file.readline()) - 1.0]).to('cuda'))
 
     graph_label_file.close()
     node_label_file.close()
@@ -82,7 +82,4 @@ def load_data():
     adjacency_file.close()
 
     return molecule_list, label_list
-
-def sigmoid(s):
-    return 1.0/(1.0 + math.exp(-s))
 

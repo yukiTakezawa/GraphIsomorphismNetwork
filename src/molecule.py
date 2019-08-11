@@ -1,5 +1,5 @@
 class Molecule:
     def __init__(self, graph, nodes):
-        self.graph = graph # Ajacency Matrix
-        self.nodes = nodes # means C, N, ... Br
+        self.graph = graph.to('cuda') # Ajacency Matrix
+        self.nodes = nodes.to('cuda') # means C, N, ... Br
         
