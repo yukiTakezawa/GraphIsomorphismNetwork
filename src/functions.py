@@ -42,8 +42,8 @@ def load_data():
         while True:
             edge = literal_eval(adjacency_file.readline())
             if ((edge[0] <= tmp_sum) & (edge[1] <= tmp_sum)):
-                graph_list[graph_idx][edge[0] - tmp_sum1][edge[1] - tmp_sum1] = 1
-                graph_list[graph_idx][edge[1] - tmp_sum1][edge[0] - tmp_sum1] = 1
+                graph_list[graph_idx][edge[0] - tmp_sum1][edge[1] - tmp_sum1] = 1.0
+                graph_list[graph_idx][edge[1] - tmp_sum1][edge[0] - tmp_sum1] = 1.0
             else:
                 break
         tmp_sum1 = tmp_sum
@@ -60,11 +60,11 @@ def load_data():
             node_label = int(node_label_file.readline())
             node_attribute = float(node_attribute_file.readline())
             if (node_label == 0):
-                nodes[node_idx] = torch.tensor([1, 0, 0, node_attribute])
+                nodes[node_idx] = torch.tensor([1.0, 0.0, 0.0, node_attribute])
             elif (node_label == 1):
-                nodes[node_idx] = torch.tensor([0, 1, 0, node_attribute])
+                nodes[node_idx] = torch.tensor([0.0, 1.0, 0.0, node_attribute])
             else:
-                nodes[node_idx] = torch.tensor([0, 0, 1, node_attribute])
+                nodes[node_idx] = torch.tensor([0.0, 0.0, 1.0, node_attribute])
         node_list.append(nodes)
 
 
