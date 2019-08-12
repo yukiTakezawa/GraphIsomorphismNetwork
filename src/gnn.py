@@ -1,12 +1,13 @@
 import numpy as np
 import torch
 from molecule import *
+import copy
 
 class GraphIsomorphismNetwork:
     def __init__(self, node_dim, update_loop_size):
         self.node_dim = node_dim
         self.update_loop_size = update_loop_size
-        self.eps = np.random.normal() # learnable parameter    
+        self.eps = 0.0 #np.random.normal() # learnable parameter    
 
     # function to update nodes
     def mlp(self, molecule):
@@ -20,11 +21,11 @@ class GraphIsomorphismNetwork:
         return molecule.nodes.sum(dim=0)
 
     def predict(self, molecule):
-        
+        tmp_molecule = copy.deepcopy(molecule)
         # CONCAT(READOUT(molecule.nodes at k) k < update_loop_size)
         sum_of_nodes = torch.zeros(self.node_dim).to('cuda')      
         for i in range(self.update_loop_size):
-            molecule.nodes = self.mlp(molecule) 
-            sum_of_nodes += self.readout(molecule)
+            tmp_molecule.nodes = self.mlp(tmp_molecule) 
+            sum_of_nodes += self.readout(tmp_molecule)
 
         return sum_of_nodes
