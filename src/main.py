@@ -11,14 +11,14 @@ from gnn import *
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
-        self.gin = GraphIsomorphismNetwork(4, 20) 
-        self.fun1 = nn.Linear(4, 50)
+        self.gin = GraphIsomorphismNetwork(3, 20) 
+        self.fun1 = nn.Linear(3, 50)
         self.fun2 = nn.Linear(50, 60)
         self.fun3 = nn.Linear(60, 1)
 
     def forward(self, molecule):
         x = self.gin.predict(molecule)
-        x = x / x.max()
+        #x = x / x.max()
         x = self.fun1(x)
         x = F.sigmoid(x)
         x = self.fun2(x)
