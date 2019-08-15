@@ -11,12 +11,15 @@ from gnn import *
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
-        self.fun1 = nn.Linear(4, 50)
+        self.fun0 = nn.Linear(4, 100)
+        self.fun1 = nn.Linear(100, 50)
         self.fun2 = nn.Linear(50, 25)
         self.fun3 = nn.Linear(25, 1)
 
     def forward(self, x):
         #print(x)
+        x = self.fun0(x)
+        x = F.relu(x)
         x = self.fun1(x)
         x = F.relu(x)
         x = self.fun2(x)
@@ -83,8 +86,9 @@ def calc_accuracy(model, test_data, test_labels, test_size):
     return correct/test_size
     
 def main():
-    epoch_size = 500
-    data_size = 1112
+    epoch_size = 1500
+    train_data_size = 912
+    test_data_size = 200
     accuracy_list = []
     
     device = torch.device('cuda')
@@ -96,13 +100,20 @@ def main():
     criterion = nn.BCELoss()#nn.MSELoss()
 
     torch.autograd.set_detect_anomaly(True)
-    
+
+    # split data into train data and test data
+    shuffled_data, shuffled_labels = shuffle_data(processed_data, labels)
+    test_data = shuffled_data[0:200]
+    test_labels = shuffled_labels[0:200]
+    train_data = shuffled_data[200:1112]
+    train_labels = shuffled_labels[200:1112]
+
+    # traning
     for i in range(epoch_size):
 
-        shuffled_data, shuffled_labels = shuffle_data(processed_data, labels)
-
+        shuffled_data, shuffled_labels = shuffle_data(train_data, train_labels)
         
-        for j in range(data_size):
+        for j in range(train_data_size):
             with torch.autograd.detect_anomaly():
                 optimizer.zero_grad()
                 output = model(shuffled_data[j])
@@ -111,7 +122,7 @@ def main():
                 loss.backward()
                 optimizer.step()
                 
-        accuracy = calc_accuracy(model, processed_data, labels, data_size)
+        accuracy = calc_accuracy(model, test_data, test_labels, test_data_size)
         accuracy_list.append(accuracy)
         print(accuracy)
         print("learnig %d epoch" % (i))
