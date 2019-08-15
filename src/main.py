@@ -18,9 +18,9 @@ class Model(nn.Module):
     def forward(self, x):
         #print(x)
         x = self.fun1(x)
-        x = F.sigmoid(x)
+        x = F.relu(x)
         x = self.fun2(x)
-        x = F.sigmoid(x)
+        x = F.relu(x)
         x = self.fun3(x)
         x = F.sigmoid(x)
         #print(x)
