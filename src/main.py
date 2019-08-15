@@ -11,10 +11,10 @@ from gnn import *
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
-        self.gin = GraphIsomorphismNetwork(3, 20) 
-        self.fun1 = nn.Linear(3, 50)
-        self.fun2 = nn.Linear(50, 60)
-        self.fun3 = nn.Linear(60, 1)
+        self.gin = GraphIsomorphismNetwork(4, 20) 
+        self.fun1 = nn.Linear(4, 50)
+        self.fun2 = nn.Linear(50, 25)
+        self.fun3 = nn.Linear(25, 1)
 
     def forward(self, molecule):
         x = self.gin.predict(molecule)
@@ -28,6 +28,29 @@ class Model(nn.Module):
         #print(x)
         return x
 
+def preproceccing(data):
+    maximum_node_val = 0 # maximum value of node value
+    maximum_attribute_val = 0 # maximum value of attribute value 
+    for i in range(len(data)):
+        tmp = data[i].nodes[:,0:3].max()
+        tmp = tmp.cpu()
+        tmp = tmp.numpy()
+        if (tmp > maximum_node_val):
+            maximum_node_val = tmp
+
+        tmp = data[i].nodes[:,3:4].max()
+        tmp = tmp.cpu()
+        tmp = tmp.numpy()
+        if (tmp > maximum_attribute_val):
+            maximum_attribute_val = tmp
+            
+    for i in range(len(data)):
+        data[i].nodes[:,0:3] /= torch.from_numpy(maximum_node_val)
+        data[i].nodes[:,3:4] /= torch.from_numpy(maximum_attribute_val)
+    
+        
+    return data
+            
 def shuffle_data(x, y):
     zipped = list(zip(x, y))
     np.random.shuffle(zipped)

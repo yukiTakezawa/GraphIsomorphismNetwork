@@ -51,21 +51,21 @@ def load_data():
     print(graph_list[0])
         
     # check node feature
-    node_dim = 3 # dimension of node
+    node_dim = 4 # dimension of node
     node_list = []
     for graph_idx in range(data_num):
         nodes = torch.zeros(graph_size_list[graph_idx], node_dim)
         
         for node_idx in range(graph_size_list[graph_idx]):
             node_label = int(node_label_file.readline())
-            #node_attribute = float(node_attribute_file.readline())
-            node_val = 0.000000000000001
+            node_attribute = float(node_attribute_file.readline())
+            node_val =  1.0 #0.000000000000001
             if (node_label == 0):
-                nodes[node_idx] = torch.tensor([node_val, 0.0, 0.0])
+                nodes[node_idx] = torch.tensor([node_val, 0.0, 0.0, node_attribute])
             elif (node_label == 1):
-                nodes[node_idx] = torch.tensor([0.0, node_val, 0.0])
+                nodes[node_idx] = torch.tensor([0.0, node_val, 0.0, node_attribute])
             else:
-                nodes[node_idx] = torch.tensor([0.0, 0.0, node_val])
+                nodes[node_idx] = torch.tensor([0.0, 0.0, node_val, node_attribute])
         node_list.append(nodes)
 
 
