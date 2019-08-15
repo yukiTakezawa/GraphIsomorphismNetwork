@@ -1,4 +1,4 @@
-# GraphIsomorphismNetwork
+# Graph Isomorphism Network
 
 This program is neural network for graph classification using
 Graph Isomorphism Network (GIN).
