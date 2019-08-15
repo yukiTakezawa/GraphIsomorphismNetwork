@@ -29,8 +29,17 @@ class Model(nn.Module):
         #print(x)
         return x
 
-# normalize feature
+
 def preproceccing(data):
+    ### processe data by GIN and normalize each value
+    # 
+    # Args:
+    #   data(list of Molecule):
+    #
+    # Returns:
+    #   list of torch.Tensor : processed data by GIN
+    ###
+
     gin = GraphIsomorphismNetwork(4, 20)
     processed_data = []
     
@@ -54,12 +63,34 @@ def preproceccing(data):
     return processed_data
             
 def shuffle_data(x, y):
+    ### shuffle x and y
+    #
+    # Args:
+    #   x (list):
+    #   y (list);
+    #
+    # Returns:
+    #   list, list: shuffled x and y
+    ###
+    
     zipped = list(zip(x, y))
     np.random.shuffle(zipped)
     x, y = zip(*zipped)
     return x, y
 
 def calc_accuracy(model, test_data, test_labels, test_size):
+    ### calcurate accuracy
+    #
+    # Args:
+    #    model (Model): trained model
+    #    test_data (list): 
+    #    test_labels (list):
+    #    test_size (int): size of test data
+    #
+    # Returns:
+    #   float: accuracy
+    ###
+    
     correct = 0
     error1 = 0
     error0 = 0

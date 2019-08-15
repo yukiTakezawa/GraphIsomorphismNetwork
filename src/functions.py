@@ -4,6 +4,13 @@ from ast import literal_eval
 from molecule import *
 
 def load_data():
+    ### load data 
+    #
+    # Returns:
+    #   list of Molecule: 
+    #   list of torch.Tensor: 
+    ###
+    
     data_num = 1112
 
     graph_label_file = open('../dataset/PROTEINS/PROTEINS_graph_labels.txt')
@@ -29,7 +36,7 @@ def load_data():
                 tmp0 = tmp1
                 break
 
-        # append adjacency matric
+        # append adjacency matrix
         graph_list.append(torch.zeros(graph_size, graph_size))
         graph_size_list.append(graph_size)
         
