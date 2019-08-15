@@ -83,7 +83,7 @@ def calc_accuracy(model, test_data, test_labels, test_size):
     return correct/test_size
     
 def main():
-    epoch_size = 300
+    epoch_size = 500
     data_size = 1112
     accuracy_list = []
     
@@ -115,7 +115,7 @@ def main():
         accuracy_list.append(accuracy)
         print(accuracy)
         print("learnig %d epoch" % (i))
-    print("finished learning \n best accuracy is %f" % (max(accuracy_list))
+    print("finished learning \n best accuracy is %f" % (max(accuracy_list)))
 
 
     plt.plot(accuracy_list)
