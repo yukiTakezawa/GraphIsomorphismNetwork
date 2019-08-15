@@ -11,14 +11,12 @@ from gnn import *
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
-        self.gin = GraphIsomorphismNetwork(4, 20) 
         self.fun1 = nn.Linear(4, 50)
         self.fun2 = nn.Linear(50, 25)
         self.fun3 = nn.Linear(25, 1)
 
-    def forward(self, molecule):
-        x = self.gin.predict(molecule)
-        #x = x / x.max()
+    def forward(self, x):
+        #print(x)
         x = self.fun1(x)
         x = F.sigmoid(x)
         x = self.fun2(x)
@@ -28,28 +26,29 @@ class Model(nn.Module):
         #print(x)
         return x
 
+# normalize feature
 def preproceccing(data):
-    maximum_node_val = 0 # maximum value of node value
-    maximum_attribute_val = 0 # maximum value of attribute value 
+    gin = GraphIsomorphismNetwork(4, 20)
+    processed_data = []
+    
     for i in range(len(data)):
-        tmp = data[i].nodes[:,0:3].max()
-        tmp = tmp.cpu()
-        tmp = tmp.numpy()
-        if (tmp > maximum_node_val):
-            maximum_node_val = tmp
-
-        tmp = data[i].nodes[:,3:4].max()
+        processed_data.append(gin.predict(data[i]))
+        
+    maximum_attribute_val = 0 # maximum value of attribute value 
+        
+    for i in range(len(processed_data)):
+        processed_data[i][0:3] /= processed_data[i][0:3].max()
+        
+        tmp = processed_data[i][3]
         tmp = tmp.cpu()
         tmp = tmp.numpy()
         if (tmp > maximum_attribute_val):
             maximum_attribute_val = tmp
-            
-    for i in range(len(data)):
-        data[i].nodes[:,0:3] /= torch.from_numpy(maximum_node_val)
-        data[i].nodes[:,3:4] /= torch.from_numpy(maximum_attribute_val)
-    
-        
-    return data
+
+    for i in range(len(processed_data)):
+        processed_data[i][3] /= torch.from_numpy(maximum_attribute_val)
+
+    return processed_data
             
 def shuffle_data(x, y):
     zipped = list(zip(x, y))
@@ -90,6 +89,8 @@ def main():
     
     device = torch.device('cuda')
     data, labels = load_data()
+    processed_data = preproceccing(data)
+    
     model = Model().to(device)
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     criterion = nn.BCELoss()#nn.MSELoss()
@@ -98,7 +99,7 @@ def main():
     
     for i in range(epoch_size):
 
-        shuffled_data, shuffled_labels = shuffle_data(data, labels)
+        shuffled_data, shuffled_labels = shuffle_data(processed_data, labels)
 
         
         for j in range(data_size):
@@ -110,11 +111,11 @@ def main():
                 loss.backward()
                 optimizer.step()
                 
-        accuracy = calc_accuracy(model, data, labels, data_size)
+        accuracy = calc_accuracy(model, processed_data, labels, data_size)
         accuracy_list.append(accuracy)
         print(accuracy)
         print("learnig %d epoch" % (i))
-    print("finished learning \n calcurating accuracy")
+    print("finished learning \n best accuracy is %f" % (max(accuracy_list))
 
 
     plt.plot(accuracy_list)
