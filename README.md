@@ -5,6 +5,8 @@ Graph Isomorphism Network (GIN).
 GIN was proposed in `"Keyulu Xu*, Weihua Hu*, Jure Leskovec, Stefanie Jegelka. How Powerful are Graph Neural Networks? ICLR 2019"`.
 Dataset is PROTEINS in [Benchmark Data Sets for Graph Kernels](http://graphkernels.cs.tu-dortmund.de) .
 
+And accuracy is about 0.74.
+
 ## Requirement
 * python 3.6
 * pytorch
